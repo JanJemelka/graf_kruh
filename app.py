@@ -2,7 +2,8 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
 from fpdf import FPDF
-import io
+import tempfile
+import os
 
 # ------------------------------------------------------
 # HLAVNÍ APLIKACE
@@ -48,10 +49,10 @@ st.write("""
 
 # --- FUNKCE NA EXPORT PDF ---
 def export_pdf(fig):
-    # uložíme graf do paměti jako PNG
-    buf = io.BytesIO()
-    fig.savefig(buf, format="png")
-    buf.seek(0)
+    # uložíme graf do dočasného souboru
+    tmpfile = tempfile.NamedTemporaryFile(delete=False, suffix=".png")
+    fig.savefig(tmpfile.name, format="png")
+    tmpfile.close()
 
     # vytvoříme PDF
     pdf = FPDF()
@@ -70,11 +71,17 @@ def export_pdf(fig):
     pdf.cell(200, 10, "Autor: Jan Novák", ln=True)
     pdf.cell(200, 10, "Kontakt: jan.novak@vut.cz", ln=True)
 
-    # vložíme graf (rozměr cca půl stránky)
+    # vložíme obrázek grafu
     pdf.ln(10)
-    pdf.image(buf, x=30, w=150)
+    pdf.image(tmpfile.name, x=30, w=150)
 
-    return pdf.output(dest="S").encode("latin-1")
+    # převedeme PDF na bytes
+    pdf_bytes = pdf.output(dest="S").encode("latin-1")
+
+    # smažeme dočasný soubor
+    os.remove(tmpfile.name)
+
+    return pdf_bytes
 
 # --- TLAČÍTKO PDF ---
 if st.button("📄 Exportovat do PDF"):
