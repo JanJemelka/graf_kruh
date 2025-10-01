@@ -2,6 +2,7 @@ import streamlit as st
 import matplotlib.pyplot as plt
 import numpy as np
 from fpdf import FPDF
+import io
 
 # ------------------------------------------------------
 # HLAVNÍ APLIKACE
@@ -45,10 +46,7 @@ st.write("""
 **Použité technologie:** Python, Streamlit, matplotlib, fpdf  
 """)
 
-# --- PDF EXPORT ---
-import io
-from fpdf import FPDF
-
+# --- FUNKCE NA EXPORT PDF ---
 def export_pdf(fig):
     # uložíme graf do paměti jako PNG
     buf = io.BytesIO()
@@ -77,3 +75,8 @@ def export_pdf(fig):
     pdf.image(buf, x=30, w=150)
 
     return pdf.output(dest="S").encode("latin-1")
+
+# --- TLAČÍTKO PDF ---
+if st.button("📄 Exportovat do PDF"):
+    pdf_bytes = export_pdf(fig)
+    st.download_button("Stáhnout PDF", data=pdf_bytes, file_name="kruznice.pdf")
