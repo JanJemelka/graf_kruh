@@ -46,7 +46,16 @@ st.write("""
 """)
 
 # --- PDF EXPORT ---
-def export_pdf():
+import io
+from fpdf import FPDF
+
+def export_pdf(fig):
+    # uložíme graf do paměti jako PNG
+    buf = io.BytesIO()
+    fig.savefig(buf, format="png")
+    buf.seek(0)
+
+    # vytvoříme PDF
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
@@ -63,9 +72,8 @@ def export_pdf():
     pdf.cell(200, 10, "Autor: Jan Novák", ln=True)
     pdf.cell(200, 10, "Kontakt: jan.novak@vut.cz", ln=True)
 
+    # vložíme graf (rozměr cca půl stránky)
+    pdf.ln(10)
+    pdf.image(buf, x=30, w=150)
+
     return pdf.output(dest="S").encode("latin-1")
-
-if st.button("📄 Exportovat do PDF"):
-    pdf_bytes = export_pdf()
-    st.download_button("Stáhnout PDF", data=pdf_bytes, file_name="kruznice.pdf")
-
