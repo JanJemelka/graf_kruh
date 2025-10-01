@@ -23,8 +23,8 @@ center_color = st.sidebar.color_picker("Barva středu", "#0000ff")
 
 st.sidebar.markdown("---")
 st.sidebar.header("Informace o autorovi")
-author_name = st.sidebar.text_input("Jméno (do PDF)", value="Jan Novak")
-author_contact = st.sidebar.text_input("Kontakt (email)", value="jan.novak@example.com")
+author_name = st.sidebar.text_input("Jméno (do PDF)", value="Jan Jemelka")
+author_contact = st.sidebar.text_input("Kontakt (email)", value="277926@vutbr.cz")
 
 # --- POMOCNÁ FUNKCE: transliterace textu (bez diakritiky, bezpečné do PDF) ---
 def translit_ascii(s: str) -> str:
