@@ -98,8 +98,7 @@ def export_pdf(fig, author_name, author_contact):
         pdf.cell(0, 8, f"Stred: ({x0}, {y0})", ln=1)
         pdf.cell(0, 8, f"Polomer: {r} m", ln=1)
         pdf.cell(0, 8, f"Pocet bodu: {n}", ln=1)
-        pdf.cell(0, 8, f"Barva bodu: {point_color}", ln=1)
-        pdf.cell(0, 8, f"Barva stredu: {center_color}", ln=1)
+
 
         pdf.ln(6)
         pdf.image(tmp.name, x=30, w=150)
